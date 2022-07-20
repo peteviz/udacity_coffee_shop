@@ -3,9 +3,10 @@ from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-database_filename = "database.db"
+database_filename = "coffeeShop"
 project_dir = os.path.dirname(os.path.abspath(__file__))
-database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
+# database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
+database_path = "postgresql://postgres:Dam1l0laak1nd3@localhost:5432/coffeeShop"
 
 db = SQLAlchemy()
 
@@ -39,9 +40,16 @@ def db_drop_and_create_all():
         recipe='[{"name": "water", "color": "blue", "parts": 1}]'
     )
 
-
     drink.insert()
+
+    drink1 = Drink(
+        title='red wine',
+        recipe='[{"name": "red wine", "color": "red", "parts": 2}]'
+    )
+
+    drink1.insert()
 # ROUTES
+
 
 '''
 Drink
@@ -65,7 +73,8 @@ class Drink(db.Model):
 
     def short(self):
         print(json.loads(self.recipe))
-        short_recipe = [{'color': r['color'], 'parts': r['parts']} for r in json.loads(self.recipe)]
+        short_recipe = [{'color': r['color'], 'parts': r['parts']}
+                        for r in json.loads(self.recipe)]
         return {
             'id': self.id,
             'title': self.title,
